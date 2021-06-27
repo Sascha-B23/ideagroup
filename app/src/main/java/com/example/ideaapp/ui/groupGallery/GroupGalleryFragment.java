@@ -54,7 +54,6 @@ public class GroupGalleryFragment extends Fragment {
         recyclerView.setLayoutManager(layoutRv);
 
         content = new ArrayList<IdeaGroup>();
-        content = new ArrayList<IdeaGroup>();
         adapter = new MiniAdapter(content);
         recyclerView.setAdapter(adapter);
         service = new InfrastructureWebservice();
