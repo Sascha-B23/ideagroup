@@ -94,31 +94,5 @@ public class GroupGalleryFragment extends Fragment {
                     }
                 }));
 
-        testText = view.findViewById(R.id.testText);
-        testRest = view.findViewById(R.id.testButton);
-
-        testRest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                InfrastructureWebservice service = null;
-                String s = "";
-                long id;
-                String result;
-                Appuser appuser = null;
-
-                        Log.println(1,"d","JETZT IN CASE DRIN");
-                        id = 1;
-                        service = new InfrastructureWebservice();
-                        try {
-                            Appuser user = service.getUser(2);
-                            if (user != null)
-                                testText.setText(user.toString() + "booo");
-                        } catch (NoSuchRowException e) {
-                            testText.setText("Kein Raum gefunden!");
-                        }
-
-            }
-        });
-
     }
 }

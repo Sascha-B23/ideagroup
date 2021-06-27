@@ -54,7 +54,6 @@ public class InfrastructureWebservice {
             String output;
             Appuser user = null;
             if ((output = response.body().string()) != null) {
-                System.out.println(output);
                 user = gson.fromJson(output, Appuser.class);
                 System.out.println(user.toString());
                 // zugegebene Vergewaltigung der JsonSyntaxException hinsichtlich
@@ -69,7 +68,6 @@ public class InfrastructureWebservice {
         return null;
     }
 
-
     public Collection<IdeaGroup> getGroupsByUserid(int id){
         urlString = URL + "/ideagroup/byuserid/" + id;
         Request request = new Request.Builder()
@@ -82,7 +80,7 @@ public class InfrastructureWebservice {
             IdeaGroup[] groups = null;
             if ((output = response.body().string()) != null)
                 groups = gson.fromJson(output, IdeaGroup[].class);
-                System.out.println(groups.toString());
+            System.out.println(groups.toString());
             System.out.println("Testausgabe:");
             for (IdeaGroup i : groups){
                 System.out.println(i.getGroupname());
@@ -118,11 +116,23 @@ public class InfrastructureWebservice {
                 System.out.println("Jetzt im if" + output);
                 g = gson.fromJson(output, IdeaGroup.class);
                 System.out.println("Jetzt nach gson" + g.toString());
-              
+
+
+                // zugegebene Vergewaltigung der JsonSyntaxException hinsichtlich
+                // NoSuchRowException ...
+            }
+            return g;
+        } catch (IOException e) { // zu newCall(request).execute() und response.body().string();
+            e.printStackTrace();
+        } catch (com.google.gson.JsonSyntaxException e) {
+            throw new NoSuchRowException();
+        }
+        return null;
+    }
+
     public void createAppuser(Appuser appuser) throws IllegalCreateException {
         urlString = URL + "/appuser/save";
         OkHttpClient client = new OkHttpClient();
-
         RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
                 gson.toJson(appuser));
         Request request = new Request.Builder()
@@ -142,156 +152,144 @@ public class InfrastructureWebservice {
 
 
 
-
-                // zugegebene Vergewaltigung der JsonSyntaxException hinsichtlich
-                // NoSuchRowException ...
-            }
-            return g;
-        } catch (IOException e) { // zu newCall(request).execute() und response.body().string();
-            e.printStackTrace();
-        } catch (com.google.gson.JsonSyntaxException e) {
-            throw new NoSuchRowException();
-        }
-        return null;
-    }
     /**
-    public int getCountRooms() {
-        urlString = URL + "/count";
-        Request request = new Request.Builder()
-                .url(urlString)
-                .build();
-        try {
-            Response response = client.newCall(request).execute();
-            return Integer.parseInt(response.body().string());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
+     public int getCountRooms() {
+     urlString = URL + "/count";
+     Request request = new Request.Builder()
+     .url(urlString)
+     .build();
+     try {
+     Response response = client.newCall(request).execute();
+     return Integer.parseInt(response.body().string());
+     } catch (IOException e) {
+     e.printStackTrace();
+     }
+     return 0;
+     }
 
-    public Collection<Room> getRooms() {
-        urlString = URL + "/rooms";
-        Request request = new Request.Builder()
-                .url(urlString)
-                .build();
-        try {
-            Response response = client.newCall(request).execute();
-            String output;
-            Room[] rooms = null;
-            if ((output = response.body().string()) != null)
-                rooms = gson.fromJson(output, Room[].class);
-            Collection<Room> allRooms = new ArrayList<Room>();
-            for (int i = 0; i < rooms.length; i++)
-                allRooms.add(rooms[i]);
-            return allRooms;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+     public Collection<Room> getRooms() {
+     urlString = URL + "/rooms";
+     Request request = new Request.Builder()
+     .url(urlString)
+     .build();
+     try {
+     Response response = client.newCall(request).execute();
+     String output;
+     Room[] rooms = null;
+     if ((output = response.body().string()) != null)
+     rooms = gson.fromJson(output, Room[].class);
+     Collection<Room> allRooms = new ArrayList<Room>();
+     for (int i = 0; i < rooms.length; i++)
+     allRooms.add(rooms[i]);
+     return allRooms;
+     } catch (IOException e) {
+     e.printStackTrace();
+     }
+     return null;
+     }
 
-    public Collection<Building> getBuildings() {
-        urlString = URL + "/buildings";
-        Request request = new Request.Builder()
-                .url(urlString)
-                .build();
-        try {
-            Response response = client.newCall(request).execute();
-            String output;
-            Building[] buildings = null;
-            if ((output = response.body().string()) != null)
-                buildings = gson.fromJson(output, Building[].class);
-            Collection<Building> allBuildings = new ArrayList<Building>();
-            for (int i = 0; i < buildings.length; i++)
-                allBuildings.add(buildings[i]);
-            return allBuildings;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+     public Collection<Building> getBuildings() {
+     urlString = URL + "/buildings";
+     Request request = new Request.Builder()
+     .url(urlString)
+     .build();
+     try {
+     Response response = client.newCall(request).execute();
+     String output;
+     Building[] buildings = null;
+     if ((output = response.body().string()) != null)
+     buildings = gson.fromJson(output, Building[].class);
+     Collection<Building> allBuildings = new ArrayList<Building>();
+     for (int i = 0; i < buildings.length; i++)
+     allBuildings.add(buildings[i]);
+     return allBuildings;
+     } catch (IOException e) {
+     e.printStackTrace();
+     }
+     return null;
+     }
 
-    public Room getRoom(long id) throws NoSuchRowException {
-        urlString = URL + "/rooms/" + id;
-        Request request = new Request.Builder()
-                .url(urlString)
-                .build();
-        try {
-            Response response = client.newCall(request).execute();
-            String output;
-            Room room = null;
-            if ((output = response.body().string()) != null) {
-                room = gson.fromJson(output, Room.class);
-                // zugegebene Vergewaltigung der JsonSyntaxException hinsichtlich
-                // NoSuchRowException ...
-            }
-            return room;
-        } catch (IOException e) { // zu newCall(request).execute() und response.body().string();
-            e.printStackTrace();
-        } catch (com.google.gson.JsonSyntaxException e) {
-            throw new NoSuchRowException();
-        }
-        return null;
-    }
+     public Room getRoom(long id) throws NoSuchRowException {
+     urlString = URL + "/rooms/" + id;
+     Request request = new Request.Builder()
+     .url(urlString)
+     .build();
+     try {
+     Response response = client.newCall(request).execute();
+     String output;
+     Room room = null;
+     if ((output = response.body().string()) != null) {
+     room = gson.fromJson(output, Room.class);
+     // zugegebene Vergewaltigung der JsonSyntaxException hinsichtlich
+     // NoSuchRowException ...
+     }
+     return room;
+     } catch (IOException e) { // zu newCall(request).execute() und response.body().string();
+     e.printStackTrace();
+     } catch (com.google.gson.JsonSyntaxException e) {
+     throw new NoSuchRowException();
+     }
+     return null;
+     }
 
-    public Building getBuilding(long id) throws NoSuchRowException {
-        urlString = URL + "/buildings/" + id;
-        Request request = new Request.Builder()
-                .url(urlString)
-                .build();
-        try {
-            Response response = client.newCall(request).execute();
-            String output;
-            Building building = null;
-            if ((output = response.body().string()) != null) {
-                building = gson.fromJson(output, Building.class);
-                // zugegebene Vergewaltigung der JsonException hinsichtlich
-                // NoSuchRowException ...
-            }
-            return building;
-        } catch (IOException e) { // zu newCall(request).execute() und response.body().string();
-            e.printStackTrace();
-        } catch (com.google.gson.JsonSyntaxException e) {
-            throw new NoSuchRowException();
-        }
-        return null;
-    }
+     public Building getBuilding(long id) throws NoSuchRowException {
+     urlString = URL + "/buildings/" + id;
+     Request request = new Request.Builder()
+     .url(urlString)
+     .build();
+     try {
+     Response response = client.newCall(request).execute();
+     String output;
+     Building building = null;
+     if ((output = response.body().string()) != null) {
+     building = gson.fromJson(output, Building.class);
+     // zugegebene Vergewaltigung der JsonException hinsichtlich
+     // NoSuchRowException ...
+     }
+     return building;
+     } catch (IOException e) { // zu newCall(request).execute() und response.body().string();
+     e.printStackTrace();
+     } catch (com.google.gson.JsonSyntaxException e) {
+     throw new NoSuchRowException();
+     }
+     return null;
+     }
 
-    public void removeBuilding(long id) throws NoSuchRowException {
-        urlString = URL + "/buildings/" + id;
-        Request request = new Request.Builder()
-                .url(urlString)
-                .delete()
-                .build();
-        try {
-            Response response = client.newCall(request).execute();
-            String responseString = response.body().string();
-            if (responseString.compareTo("{\"status\":\"success\"}") != 0)
-                throw new NoSuchRowException();
-        } catch (IOException e) { // zu newCall(request).execute() und response.body().string();
-            e.printStackTrace();
-        }
-    }
+     public void removeBuilding(long id) throws NoSuchRowException {
+     urlString = URL + "/buildings/" + id;
+     Request request = new Request.Builder()
+     .url(urlString)
+     .delete()
+     .build();
+     try {
+     Response response = client.newCall(request).execute();
+     String responseString = response.body().string();
+     if (responseString.compareTo("{\"status\":\"success\"}") != 0)
+     throw new NoSuchRowException();
+     } catch (IOException e) { // zu newCall(request).execute() und response.body().string();
+     e.printStackTrace();
+     }
+     }
 
-    public void createBuilding(Building building) throws IllegalCreateException {
-        urlString = URL + "/buildings/";
-        OkHttpClient client = new OkHttpClient();
+     public void createBuilding(Building building) throws IllegalCreateException {
+     urlString = URL + "/buildings/";
+     OkHttpClient client = new OkHttpClient();
 
-        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
-                gson.toJson(building));
-        Request request = new Request.Builder()
-                .url(urlString)
-                .post(body)
-                .build();
-        Response response = null;
-        try {
-            response = client.newCall(request).execute();
-            String responseString = response.body().string();
-            if (responseString.compareTo("{\"status\":\"success\"}") != 0)
-                throw new IllegalCreateException();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }*/
+     RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
+     gson.toJson(building));
+     Request request = new Request.Builder()
+     .url(urlString)
+     .post(body)
+     .build();
+     Response response = null;
+     try {
+     response = client.newCall(request).execute();
+     String responseString = response.body().string();
+     if (responseString.compareTo("{\"status\":\"success\"}") != 0)
+     throw new IllegalCreateException();
+     } catch (IOException e) {
+     e.printStackTrace();
+     }
+     }*/
 }
 
