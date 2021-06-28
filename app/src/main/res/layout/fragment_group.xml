@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="35dp"
+    tools:context=".ui.newCategories.NewCategories"
+    android:background="@color/blue_grey_900">
+
+    <TextView
+        android:id="@+id/GroupTitle"
+        android:textColor="@color/orange"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Group"
+        android:textSize="40dp"
+        android:textAlignment="center"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/textcontainer1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Group description:"
+        android:textSize="20dp"
+        android:layout_marginTop="40dp"
+        android:textColor="@color/blue_grey_500"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/GroupTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+    <TextView
+        android:id="@+id/GroupDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="--- desription ---"
+        android:textSize="20dp"
+        android:textColor="@color/light_orange2"
+        android:textAlignment="center"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textcontainer1"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+    <TextView
+        android:id="@+id/textcontainer2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Owner:"
+        android:textSize="25dp"
+        android:textColor="@color/blue_grey_500"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/GroupDescription"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="40dp"
+        />
+    <TextView
+        android:id="@+id/Owner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Owner:"
+        android:textSize="25dp"
+        android:textColor="@color/light_orange2"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textcontainer2"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+
+
+
+    <TextView
+        android:id="@+id/created"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:textAlignment="center"
+        android:text="Create your idea"
+        android:textSize="25sp"
+        android:textColor="@color/blue_grey_500"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

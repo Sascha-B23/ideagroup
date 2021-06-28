@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:id="@+id/relativeLayout"
+    tools:context=".ui.groupGallery.GroupGalleryFragment"
+    android:background="@color/blue_grey_900">
+
+    <TextView
+        android:id="@+id/categoryview"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:textSize="20dp"
+        android:textColor="@color/orange"
+        android:textAlignment="center"
+        android:visibility="gone"/>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rec_view"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:scrollbars="horizontal"
+        android:layout_marginBottom="10dp">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <EditText
+        android:id="@+id/editNewComment"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:textSize="10dp"
+        android:text="add comment..."
+        android:textColor="@color/light_orange2"
+        android:textAlignment="center"
+        android:visibility="gone"
+        android:background="@color/purple_500"
+        />
+    <Button
+        android:id="@+id/postComment"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:textSize="10dp"
+        android:text="Post Comment"
+        android:textColor="@color/orange"
+        android:textAlignment="center"
+        android:visibility="gone"
+        />
+
+</LinearLayout>

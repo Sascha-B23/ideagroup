@@ -11,8 +11,8 @@
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_1">Übersicht</string>
+    <string name="tab_text_2">Kategorien</string>
 
     <!-- Strings related to login -->
     <string name="google_label">Google Login</string>

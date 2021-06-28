@@ -90,8 +90,15 @@ public class MainActivity extends AppCompatActivity {
 
             service = new InfrastructureWebservice();
             int userid = Integer.parseInt(personId.substring(0, 8));
-
             try {
+                Appuser user = new Appuser(userid, personGivenName, "initial", personEmail, null);
+                if (user != null)
+                    service.createAppuser(user);
+            } catch (IllegalCreateException e) {
+                Log.v("APPUSER", "NICHT GEKLAPPT");
+            }
+
+            /*try {
                 if (service.getUser(userid) == null) {
                     try {
                         Appuser user = new Appuser(userid, personGivenName, "initial", personEmail, null);
@@ -103,7 +110,15 @@ public class MainActivity extends AppCompatActivity {
                 }
             } catch (NoSuchRowException e) {
                 e.printStackTrace();
-            }
+                try {
+                    Appuser user = new Appuser(userid, personGivenName, "initial", personEmail, null);
+                    if (user != null)
+                        service.createAppuser(user);
+                } catch (IllegalCreateException i) {
+                    Log.v("APPUSER", "NICHT GEKLAPPT");
+                }
+
+            }*/
         }
     }
 

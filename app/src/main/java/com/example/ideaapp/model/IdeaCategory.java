@@ -13,10 +13,10 @@ public class IdeaCategory implements Serializable {
 
     private int categoryid;
 
-    private String categoryTitle;
+    private String categorytitle;
 
-    private LocalDate created;
-    
+    private String created;
+
 //    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "categoryid") // commentIdcategoryid
 //    private Collection<Comments> commentsCollection;
 
@@ -28,16 +28,16 @@ public class IdeaCategory implements Serializable {
     }
 
     public IdeaCategory(String categorytitle) {
-        this.categoryTitle = categorytitle;
-        this.created = LocalDate.now();
+        this.categorytitle = categorytitle;
+        this.created = LocalDate.now().toString();
     }
-    
+
     public IdeaCategory(String categorytitle, IdeaGroup ideagroup) {
-    	this.categoryTitle = categorytitle;
-        this.created = LocalDate.now();
+    	this.categorytitle = categorytitle;
+        this.created = LocalDate.now().toString();
         this.ideagroup = ideagroup;
     }
-    
+
     public void addComment(Comments comment, Appuser author) {
 		if (commentCollection == null)
 			this.commentCollection = new HashSet<Comments>();
@@ -50,7 +50,7 @@ public class IdeaCategory implements Serializable {
 		System.out.println("comment.setCategory(this);");
 		comment.setCategory(this);
 	}
-    
+
     public void setIdeagroup(IdeaGroup ideagroup) {
 		this.ideagroup = ideagroup;
 	}
@@ -64,18 +64,18 @@ public class IdeaCategory implements Serializable {
     }
 
     public String getCategorytitle() {
-        return categoryTitle;
+        return categorytitle;
     }
 
     public void setCategorytitle(String categorytitle) {
-        this.categoryTitle = categorytitle;
+        this.categorytitle = categorytitle;
     }
 
-    public LocalDate getCreated() {
+    public String getCreated() {
         return created;
     }
 
-    public void setCreated(LocalDate created) {
+    public void setCreated(String created) {
         this.created = created;
     }
 
@@ -86,7 +86,7 @@ public class IdeaCategory implements Serializable {
 //    public void setCommentsCollection(Collection<Comments> commentsCollection) {
 //        this.commentsCollection = commentsCollection;
 //    }
-    
+
     public IdeaGroup getGroup() {
     	return ideagroup;
     }
@@ -113,20 +113,20 @@ public class IdeaCategory implements Serializable {
 		return true;
 	}
 
-    
+
 
 	@Override
 	public String toString() {
-		return "IdeaCategory [categoryid=" + categoryid + ", categorytitle=" + categoryTitle + ", created=" + created
+		return "IdeaCategory [categoryid=" + categoryid + ", categorytitle=" + categorytitle + ", created=" + created
 				+ ", ideagroup=" + ideagroup + "]";
 	}
 
 	public void copyData(IdeaCategory ideacategory) {
 		this.categoryid = ideacategory.categoryid;
-		this.categoryTitle = ideacategory.categoryTitle;
+		this.categorytitle = ideacategory.categorytitle;
 		this.created = ideacategory.created;
-		
+
 	}
-    
-    
+
+
 }

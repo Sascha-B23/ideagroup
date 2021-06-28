@@ -4,6 +4,8 @@ import android.util.Log;
 
 
 import com.example.ideaapp.model.Appuser;
+import com.example.ideaapp.model.Comments;
+import com.example.ideaapp.model.IdeaCategory;
 import com.example.ideaapp.model.IdeaGroup;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -60,7 +62,7 @@ public class InfrastructureWebservice {
 
 
     public Appuser getUser(int id) throws NoSuchRowException {
-        urlString = URL + "/appuser/member1";
+        urlString = URL + "/appuser/" + id;
         Log.e("test", urlString);
         Request request = new Request.Builder()
                 .url(urlString)
@@ -70,6 +72,30 @@ public class InfrastructureWebservice {
             System.out.println("Jetzt im Try");
             Response response = client.newCall(request).execute();
             System.out.println(response.toString());
+            String output;
+            Appuser user = null;
+            if ((output = response.body().string()) != null) {
+                user = gson.fromJson(output, Appuser.class);
+                System.out.println(user.toString());
+// zugegebene Vergewaltigung der JsonSyntaxException hinsichtlich
+// NoSuchRowException ...
+            }
+            return user;
+        } catch (IOException e) { // zu newCall(request).execute() und response.body().string();
+            e.printStackTrace();
+        } catch (com.google.gson.JsonSyntaxException e) {
+            throw new NoSuchRowException();
+        }
+        return null;
+    }
+
+    public Appuser getUserByEmail(String email) throws NoSuchRowException {
+        urlString = URL + "/appuser/email/" + email;
+        Request request = new Request.Builder()
+                .url(urlString)
+                .build();
+        try {
+            Response response = client.newCall(request).execute();
             String output;
             Appuser user = null;
             if ((output = response.body().string()) != null) {
@@ -129,24 +155,45 @@ public class InfrastructureWebservice {
             for(int i = 0; i < groups.length; i++){
                 ret.add(groups[i]);
             }
-//Collection<IdeaGroup> allRooms = new ArrayList<IdeaGroup>();
-
-
-
+            //Collection<IdeaGroup> allRooms = new ArrayList<IdeaGroup>();
             return ret;
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
-
-
-
     }
 
+    public Collection<IdeaGroup> getGroupsByOwnerId(int id){
+        urlString = URL + "/ideagroup/byownerid/" + id;
+        Request request = new Request.Builder()
+                .url(urlString)
+                .build();
+        System.out.println(request.toString());
+        try {
+            Response response = client.newCall(request).execute();
+            String output;
+            IdeaGroup[] groups = null;
+            if ((output = response.body().string()) != null)
+                groups = gson.fromJson(output, IdeaGroup[].class);
+            System.out.println(groups.toString());
+            System.out.println("Testausgabe:");
+            for (IdeaGroup i : groups){
+                System.out.println(i.getGroupname());
+            }
+            Collection<IdeaGroup> ret = new ArrayList<IdeaGroup>();
+            for(int i = 0; i < groups.length; i++){
+                ret.add(groups[i]);
+            }
+            //Collection<IdeaGroup> allRooms = new ArrayList<IdeaGroup>();
+            return ret;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-
-    public IdeaGroup getGroupByName(String name) throws NoSuchRowException {
-        urlString = URL + "/ideagroup/Updategruppe4";
+        public IdeaGroup getGroupByName(String name) throws NoSuchRowException {
+        urlString = URL + "/ideagroup/" + name;
         Log.e("test", urlString);
         Request request = new Request.Builder()
                 .url(urlString)
@@ -163,13 +210,6 @@ public class InfrastructureWebservice {
                 g = gson.fromJson(output, IdeaGroup.class);
                 System.out.println("Jetzt nach gson" + g.toString());
 
-
-
-
-
-
-
-
                 // zugegebene Vergewaltigung der JsonSyntaxException hinsichtlich
                 // NoSuchRowException ...
             }
@@ -181,6 +221,84 @@ public class InfrastructureWebservice {
         }
         return null;
     }
+
+    public Collection<IdeaCategory> getCategoryByGroupId(int id){
+        urlString = URL + "/ideacatergories/byideagroup/" + id;
+        Request request = new Request.Builder()
+                .url(urlString)
+                .build();
+        try {
+            Response response = client.newCall(request).execute();
+            String output;
+            IdeaCategory[] categories;
+            System.out.println("OUTPUT:");
+            if ((output = response.body().string()) != null)
+                System.out.println("OUTPUT:" + output.toString());
+                categories = gson.fromJson(output, IdeaCategory[].class);
+                System.out.println("Array:" + categories.toString());
+            ArrayList<IdeaCategory> ret = new ArrayList<>();
+            for(int i = 0; i < categories.length; i++){
+                System.out.println(categories[i].toString());
+                ret.add(categories[i]);
+                System.out.println(ret.get(i).toString());
+            }
+            //Collection<IdeaGroup> allRooms = new ArrayList<IdeaGroup>();
+            return ret;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+
+    }
+
+    public Collection<Comments> getCommentsByCategoryId(int id){
+        urlString = URL + "/comments/byCategoryId/" + id;
+        Request request = new Request.Builder()
+                .url(urlString)
+                .build();
+        try {
+            Response response = client.newCall(request).execute();
+            String output;
+            Comments[] comments;
+            System.out.println("OUTPUT:");
+            if ((output = response.body().string()) != null)
+                System.out.println("OUTPUT:" + output.toString());
+            comments = gson.fromJson(output, Comments[].class);
+            System.out.println("Array:" + comments.toString());
+            ArrayList<Comments> ret = new ArrayList<>();
+            for(int i = 0; i < comments.length; i++){
+                System.out.println(comments[i].toString());
+                ret.add(comments[i]);
+                System.out.println(ret.get(i).toString());
+            }
+            //Collection<IdeaGroup> allRooms = new ArrayList<IdeaGroup>();
+            return ret;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public void postCommentToCategory(Comments c, String name) throws IllegalCreateException {
+        urlString = URL + "/comments/newCommentToCategoryId/" + name;
+        OkHttpClient client = new OkHttpClient();
+
+        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
+                gson.toJson(c));
+        Request request = new Request.Builder()
+                .url(urlString)
+                .post(body)
+                .build();
+        Response response = null;
+        try {
+            response = client.newCall(request).execute();
+            String responseString = response.body().string();
+            if (responseString.compareTo("{\"status\":\"success\"}") != 0)
+                throw new IllegalCreateException();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
     public int getCountRooms() {
         urlString = URL + "/count";

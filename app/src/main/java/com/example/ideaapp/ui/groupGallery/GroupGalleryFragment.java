@@ -29,6 +29,8 @@ import com.example.ideaapp.ui.ideagroup.IdeaGroupExp;
 import com.example.ideaapp.ui.ideagroup.PlaceholderFragment;
 import com.example.ideaapp.ws.InfrastructureWebservice;
 import com.example.ideaapp.ws.NoSuchRowException;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,6 +43,8 @@ public class GroupGalleryFragment extends Fragment {
     private ArrayList<IdeaGroup> content;
     private MiniAdapter adapter;
     private InfrastructureWebservice service;
+    private Button ownedButton;
+    private int userid;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -57,16 +61,46 @@ public class GroupGalleryFragment extends Fragment {
         adapter = new MiniAdapter(content);
         recyclerView.setAdapter(adapter);
         service = new InfrastructureWebservice();
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getActivity());
+        userid = Integer.parseInt(acct.getId().substring(0, 8));
+        ownedButton = root.findViewById(R.id.ownedbutton);
+        ownedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (ownedButton.getText() == "Show your owned Groups"){
+                    ArrayList<IdeaGroup> g = (ArrayList<IdeaGroup>) service.getGroupsByOwnerId(userid);
+
+                    if (g != null) {
+                        content.clear();
+                        content.addAll(g);
+                        adapter = new MiniAdapter(content);
+                        recyclerView.setAdapter(adapter);
+                    }
+                    ownedButton.setText("Show all Groups");
+                }
+                else {
+                    ArrayList<IdeaGroup> g = (ArrayList<IdeaGroup>) service.getGroupsByUserid(userid);
+
+                    if (g != null) {
+                        content.addAll(g);
+                        adapter = new MiniAdapter(content);
+                        recyclerView.setAdapter(adapter);
+                    }
+                    ownedButton.setText("Show your owned Groups");
+                }
+            }
+        });
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+
         return root;
+
     }
 
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        ArrayList<IdeaGroup> g = (ArrayList<IdeaGroup>) service.getGroupsByUserid(11402);
+        ArrayList<IdeaGroup> g = (ArrayList<IdeaGroup>) service.getGroupsByOwnerId(userid);
 
         if (g != null) {
             content.addAll(g);
@@ -76,11 +110,11 @@ public class GroupGalleryFragment extends Fragment {
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(this.getContext(), recyclerView ,new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
-                        System.out.println("Test" + content.get(position).getGroupname());
+                        System.out.println("Test" + content.get(position));
                         //FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
                         Intent intent = new Intent(getActivity(), IdeaGroupExp.class);
-                        startActivity(intent);
                         intent.putExtra("Gruppe", content.get(position));
+                        startActivity(intent);
                         System.out.println(content.get(position));
 
                         //ft.replace(R.id.nav_host_fragment, new HomeFragment());

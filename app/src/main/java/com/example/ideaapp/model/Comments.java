@@ -12,7 +12,7 @@ public class Comments implements Serializable {
 
     private String commentcontent;
 
-    private LocalDate commenttime;
+    private String commenttime;
 
     private Appuser author;
 
@@ -21,7 +21,7 @@ public class Comments implements Serializable {
     public Comments(String commentcontent, Appuser author, IdeaCategory ideacategory) {
     	this.commentcontent = commentcontent;
     	this.author = author;
-    	this.commenttime = LocalDate.now();
+    	this.commenttime = LocalDate.now().toString();
     	this.ideacategory = ideacategory;
     }
     
@@ -31,7 +31,7 @@ public class Comments implements Serializable {
 
     public Comments(String commentcontent) {
         this.commentcontent = commentcontent;
-        this.commenttime = LocalDate.now();
+        this.commenttime = LocalDate.now().toString();
     }
     
     public int getCommentid() {
@@ -50,11 +50,11 @@ public class Comments implements Serializable {
         this.commentcontent = commentcontent;
     }
 
-    public LocalDate getCommenttime() {
+    public String getCommenttime() {
         return commenttime;
     }
 
-    public void setCommenttime(LocalDate commenttime) {
+    public void setCommenttime(String commenttime) {
         this.commenttime = commenttime;
     }
 
